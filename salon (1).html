@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pamela Salon & Laundry Services - Kamdini</title>
+    <style>
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #6bd5ff;
+            --accent: #ffd56b;
+            --dark: #333;
+            --light: #f8f9fa;
+            --transition: all 0.3s ease;
+            --whatsapp: #25D366;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Glowing live pointer effect */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary), transparent);
+            pointer-events: none;
+            mix-blend-mode: screen;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+            filter: blur(1px);
+        }
+        
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s, width 0.3s, height 0.3s;
+            filter: blur(0.5px);
+        }
+        
+        /* Sidebar styling */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 80px;
+            background: linear-gradient(135deg, rgba(255,107,157,0.9), rgba(107,213,255,0.9));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+        
+        .sidebar:hover {
+            width: 250px;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+            width: 100%;
+            padding: 20px 0;
+        }
+        
+        .sidebar-nav li {
+            position: relative;
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .sidebar-nav li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--light);
+            transition: var(--transition);
+        }
+        
+        .sidebar-nav li:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .sidebar-nav li.active {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .sidebar-nav li.active::before {
+            width: 10px;
+            background: var(--accent);
+        }
+        
+        .sidebar-nav li i {
+            font-size: 1.5rem;
+            color: var(--light);
+            margin-right: 20px;
+            vertical-align: middle;
+        }
+        
+        .sidebar-nav li span {
+            color: var(--light);
+            font-weight: 500;
+            font-size: 1.1rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .sidebar:hover .sidebar-nav li span {
+            opacity: 1;
+        }
+        
+        /* Main content area */
+        .main-content {
+            margin-left: 80px;
+            padding: 20px;
+            transition: var(--transition);
+        }
+        
+        .sidebar:hover ~ .main-content {
+            margin-left: 250px;
+        }
+        
+        /* Section styling */
+        .section {
+            min-height: 100vh;
+            padding: 80px 40px;
+            position: relative;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        /* Home section */
+        #home {
+            background: url('images/background.jpg') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .home-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+        
+        .home-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        
+        .home-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px var(--primary), 0 0 20px var(--primary);
+            }
+            to {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--primary), 0 0 40px var(--primary);
+            }
+        }
+        
+        .home-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            background: var(--secondary);
+        }
+        
+        /* Services sections */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .service-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .service-content {
+            padding: 20px;
+        }
+        
+        .service-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .service-content p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .price {
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+        
+        /* Floating photos and videos */
+        .floating-media {
+            position: absolute;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 10s linear;
+            z-index: 10;
+            opacity: 0.9;
+        }
+        
+        .floating-media:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+        
+        /* Contact info */
+        .contact-info {
+            margin-top: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .contact-item i {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+        
+        /* WhatsApp floating button */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: var(--whatsapp);
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            animation: pulse 2s infinite;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 60px;
+            }
+            
+            .sidebar:hover {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 60px;
+            }
+            
+            .sidebar:hover ~ .main-content {
+                margin-left: 200px;
+            }
+            
+            .whatsapp-float {
+                width: 50px;
+                height: 50px;
+                font-size: 25px;
+                bottom: 30px;
+                right: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .home-content h1 {
+                font-size: 3rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                width: 250px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .whatsapp-float {
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        /* Menu toggle for mobile */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+            z-index: 1100;
+            display: none;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Glowing cursor elements -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- Sidebar navigation -->
+    <div class="sidebar">
+        <ul class="sidebar-nav">
+            <li class="active" data-section="home">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </li>
+            <li data-section="salon">
+                <i class="fas fa-cut"></i>
+                <span>Salon Services</span>
+            </li>
+            <li data-section="laundry">
+                <i class="fas fa-tshirt"></i>
+                <span>Laundry Services</span>
+            </li>
+            <li data-section="contact">
+                <i class="fas fa-phone-alt"></i>
+                <span>Contact</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Mobile menu toggle -->
+    <div class="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+    <!-- WhatsApp floating button -->
+    <a href="https://wa.me/256775355515" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- Main content -->
+    <div class="main-content">
+        <!-- Home section -->
+        <section id="home" class="section active">
+            <div class="home-overlay"></div>
+            <div class="home-content">
+                <h1>Pamela Salon & Laundry</h1>
+                <p>Your one-stop destination for premium beauty and laundry services in Kamdini</p>
+                <a href="#contact" class="btn" id="bookAppointment">Book an Appointment</a>
+            </div>
+        </section>
+        
+        <!-- Salon Services section -->
+        <section id="salon" class="section">
+            <h2 class="section-title">Salon Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="images/hairclasic.jpg" alt="Hair Styling">
+                    <div class="service-content">
+                        <h3>Hair Styling</h3>
+                        <p>Professional hair styling for all occasions. We work with all hair types to create your perfect look.</p>
+                        <p class="price">From UGX 15,000</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Hair%20Styling%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/tint.jfif" alt="Hair Coloring">
+                    <div class="service-content">
+                        <h3>Hair Coloring</h3>
+                        <p>Transform your look with our premium hair coloring services using top-quality products.</p>
+                        <p class="price">From UGX 30,000</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Hair%20Coloring%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/nails.jfif" alt="Manicure & Pedicure">
+                    <div class="service-content">
+                        <h3>Manicure & Pedicure</h3>
+                        <p>Pamper your hands and feet with our relaxing manicure and pedicure treatments.</p>
+                        <p class="price">From UGX 25,000</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Manicure%20%26%20Pedicure%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/bride.jpg" alt="Makeup Application">
+                    <div class="service-content">
+                        <h3>Makeup Application</h3>
+                        <p>Professional makeup application for weddings, events, or just because you deserve it.</p>
+                        <p class="price">From UGX 40,000</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Makeup%20Application%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/facialtreatment.jfif" alt="Facial Treatments">
+                    <div class="service-content">
+                        <h3>Facial Treatments</h3>
+                        <p>Rejuvenate your skin with our customized facial treatments using premium products.</p>
+                        <p class="price">From UGX 35,000</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Facial%20Treatments%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/hair4.jpg" alt="Braiding">
+                    <div class="service-content">
+                        <h3>Braiding</h3>
+                        <p>Traditional and modern braiding styles by our expert stylists.</p>
+                        <p class="price">From UGX 20,000</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Braiding%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Laundry Services section -->
+        <section id="laundry" class="section">
+            <h2 class="section-title">Laundry Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <img src="images/wash&fold.jfif" alt="Wash & Fold">
+                    <div class="service-content">
+                        <h3>Wash & Fold</h3>
+                        <p>Professional washing and careful folding of your clothes, returned fresh and clean.</p>
+                        <p class="price">From UGX 5,000/kg</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Wash%20%26%20Fold%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/coat.jpg" alt="Dry Cleaning">
+                    <div class="service-content">
+                        <h3>Dry Cleaning</h3>
+                        <p>Specialized cleaning for delicate fabrics and garments that require extra care.</p>
+                        <p class="price">From UGX 10,000/item</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Dry%20Cleaning%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/ironing.jpg" alt="Ironing">
+                    <div class="service-content">
+                        <h3>Ironing</h3>
+                        <p>Professional ironing services to keep your clothes looking crisp and neat.</p>
+                        <p class="price">From UGX 3,000/item</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Ironing%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/bedding.jfif" alt="Bedding & Linens">
+                    <div class="service-content">
+                        <h3>Bedding & Linens</h3>
+                        <p>Special care for your bedding, curtains, and other household linens.</p>
+                        <p class="price">From UGX 15,000/set</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Bedding%20%26%20Linens%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/express.jfif" alt="Express Service">
+                    <div class="service-content">
+                        <h3>Express Service</h3>
+                        <p>Need it done quickly? Our express service gets your laundry back to you in record time.</p>
+                        <p class="price">+50% on regular prices</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Express%20Service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+                
+                <div class="service-card">
+                    <img src="images/stain.jfif" alt="Stain Removal">
+                    <div class="service-content">
+                        <h3>Stain Removal</h3>
+                        <p>Specialized treatment for stubborn stains on your favorite garments.</p>
+                        <p class="price">From UGX 8,000/item</p>
+                        <a href="https://wa.me/256775355515?text=Hello%20Pamela%20Salon%20%26%20Laundry%2C%20I%20would%20like%20to%20book%20Stain%20Removal%20service" class="btn book-service" target="_blank">Book Now</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating media -->
+            <img src="images/VID-20250604-WA0046.mp4" class="floating-media" style="width: 200px; top: 20%; left: 70%; animation: float 14s infinite ease-in-out;">
+            <div class="floating-media" style="width: 220px; top: 60%; left: 15%; animation: float 16s infinite ease-in-out reverse;">
+                
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <h2 class="section-title">Contact Us</h2>
+            <div class="services-grid" style="max-width: 1000px; margin: 0 auto;">
+                <!-- WhatsApp Contact Card -->
+                <div class="service-card" style="text-align: center;">
+                    <div class="service-icon" style="font-size: 4rem; color: #25D366; margin: 30px 0;">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Chat on WhatsApp</h3>
+                        <p>Get instant responses during business hours (8AM - 8PM)</p>
+                        <div style="margin: 20px 0;">
+                            <p><i class="fas fa-phone"></i> +256 775 355 515</p>
+                        </div>
+                        <a href="https://wa.me/256775355515" class="btn" 
+                           style="background-color: #25D366; border-color: #25D366; display: inline-block; text-decoration: none;"
+                           target="_blank">
+                            Open WhatsApp <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Email Contact Card -->
+                <div class="service-card" style="text-align: center;">
+                    <div class="service-icon" style="font-size: 4rem; color: var(--primary); margin: 30px 0;">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Email Us</h3>
+                        <p>For inquiries, feedback or appointment scheduling</p>
+                        <div style="margin: 20px 0;">
+                            <p><i class="fas fa-envelope"></i> info@pamelasalon.com</p>
+                        </div>
+                        <a href="mailto:info@pamelasalon.com" class="btn" style="display: inline-block; text-decoration: none;">
+                            Send Email <i class="fas fa-paper-plane"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Visit Us Card -->
+                <div class="service-card" style="text-align: center;">
+                    <div class="service-icon" style="font-size: 4rem; color: var(--accent); margin: 30px 0;">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Visit Our Salon</h3>
+                        <p>We'd love to see you in person!</p>
+                        <div style="margin: 20px 0;">
+                            <p><i class="fas fa-location-dot"></i> Kampala Road, Kamdini</p>
+                            <p><i class="fas fa-clock"></i> Mon-Sat: 8AM - 8PM</p>
+                        </div>
+                        <a href="https://maps.google.com?q=Pamela+Salon+Kamdini" class="btn" 
+                           style="background-color: var(--accent); border-color: var(--accent); display: inline-block; text-decoration: none;"
+                           target="_blank">
+                            Get Directions <i class="fas fa-map"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating decorative elements -->
+            <source src="images/VID-20250604-WA0044.mp4" class="floating-media" style="width: 180px; top: 30%; left: 5%; animation: float 12s infinite ease-in-out;">
+            <source src="images/VID-20250604-WA0046.mp4" class="floating-media" style="width: 150px; top: 70%; left: 80%; animation: float 15s infinite ease-in-out reverse;">
+        </section>
+    </div>
+    
+    <script>
+        // Cursor effects
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+        
+        // Interactive elements effect
+        const interactiveElements = document.querySelectorAll('button, .sidebar-nav li, .service-card, .floating-media, a.btn');
+        
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorFollower.style.width = '30px';
+                cursorFollower.style.height = '30px';
+                cursorFollower.style.borderColor = 'var(--accent)';
+            });
+            
+            el.addEventListener('mouseleave', () => {
+                cursorFollower.style.width = '40px';
+                cursorFollower.style.height = '40px';
+                cursorFollower.style.borderColor = 'var(--primary)';
+            });
+        });
+        
+        // Section switching
+        const navItems = document.querySelectorAll('.sidebar-nav li');
+        const sections = document.querySelectorAll('.section');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all nav items and sections
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                sections.forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked nav item
+                item.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = item.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+        
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        
+        // Floating media animation
+        function floatMedia() {
+            const floatingMedia = document.querySelectorAll('.floating-media');
+            
+            floatingMedia.forEach(media => {
+                // Random initial position if not set
+                if (!media.style.top || !media.style.left) {
+                    media.style.top = Math.random() * 80 + 10 + '%';
+                    media.style.left = Math.random() * 80 + 10 + '%';
+                }
+            });
+        }
+        
+        floatMedia();
+        
+        // Auto-float animation
+        function animateFloating() {
+            const floatingElements = document.querySelectorAll('.floating-media');
+            
+            floatingElements.forEach(el => {
+                // Get current position
+                let top = parseInt(el.style.top);
+                let left = parseInt(el.style.left);
+                
+                // Calculate new position with slight variation
+                const newTop = top + (Math.random() * 2 - 1);
+                const newLeft = left + (Math.random() * 2 - 1);
+                
+                // Apply new position with boundaries
+                el.style.top = Math.max(5, Math.min(85, newTop)) + '%';
+                el.style.left = Math.max(5, Math.min(85, newLeft)) + '%';
+            });
+            
+            requestAnimationFrame(animateFloating);
+        }
+        
+        // Start the animation
+        animateFloating();
+    </script>
+</body>
+</html>
